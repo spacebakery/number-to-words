@@ -1,3 +1,4 @@
+import math 
 # Words for digits and place values
 ones = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", 
         "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
@@ -32,23 +33,23 @@ def convert_currency_to_words(currency_value):
     # Clean input and ensure it's treated as a string
     currency_value = str(currency_value).replace(",", "").strip()
     
+    try:
+        number = float(currency_value)
+    except ValueError:
+        return "Invalid input."
+
+    # Round the number to two decimal places
+    number = round(number + 1e-8, 2)  # slight correction for floating point errors
+
     # Split into whole and decimal parts
-    if '.' in currency_value:
-        whole_part, decimal_part = currency_value.split('.')
-    else:
-        whole_part, decimal_part = currency_value, "00"
+    whole_part = int(math.floor(number))
+    decimal_part = int(round((number - whole_part) * 100))
+
+    # Convert whole part and decimal part
+    whole_part_in_words = convert_number_to_words(whole_part)
     
-    # Fix decimal part to always be two digits
-    decimal_part = (decimal_part + "00")[:2]
-    
-    # Format whole part with commas
-    formatted_whole_part = f"{int(whole_part):,}"
-    
-    # Convert the whole and decimal parts
-    whole_part_in_words = convert_number_to_words(int(whole_part))
-    
-    if int(decimal_part) > 0:
-        decimal_part_in_words = convert_number_to_words(int(decimal_part)) + " cent" + ("s" if int(decimal_part) > 1 else "")
+    if decimal_part > 0:
+        decimal_part_in_words = convert_number_to_words(decimal_part) + " cent" + ("s" if decimal_part > 1 else "")
         return f"{whole_part_in_words} dollars and {decimal_part_in_words}"
     
     return f"{whole_part_in_words} dollars"
