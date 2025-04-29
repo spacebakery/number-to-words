@@ -55,6 +55,11 @@ def convert_currency_to_words(currency_value):
     return f"{whole_part_in_words} dollars"
 
 # Example usage
+# Get user input for the currency value
 currency_value = input("Enter a currency value: ")
+
+# Call the function to convert the currency value to words
 result = convert_currency_to_words(currency_value)
+
+# Print the result
 print(result)
